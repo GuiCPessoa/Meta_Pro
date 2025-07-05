@@ -9,7 +9,268 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      builds: {
+        Row: {
+          champion_id: number | null
+          created_at: string | null
+          games_played: number | null
+          id: number
+          is_featured: boolean | null
+          items: Json
+          name: string
+          patch_version: string
+          pick_rate: number
+          role: string
+          runes: Json
+          skill_order: Json | null
+          tier: string
+          updated_at: string | null
+          win_rate: number
+        }
+        Insert: {
+          champion_id?: number | null
+          created_at?: string | null
+          games_played?: number | null
+          id?: number
+          is_featured?: boolean | null
+          items: Json
+          name: string
+          patch_version?: string
+          pick_rate: number
+          role: string
+          runes: Json
+          skill_order?: Json | null
+          tier: string
+          updated_at?: string | null
+          win_rate: number
+        }
+        Update: {
+          champion_id?: number | null
+          created_at?: string | null
+          games_played?: number | null
+          id?: number
+          is_featured?: boolean | null
+          items?: Json
+          name?: string
+          patch_version?: string
+          pick_rate?: number
+          role?: string
+          runes?: Json
+          skill_order?: Json | null
+          tier?: string
+          updated_at?: string | null
+          win_rate?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "builds_champion_id_fkey"
+            columns: ["champion_id"]
+            isOneToOne: false
+            referencedRelation: "champions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      champions: {
+        Row: {
+          ban_rate: number
+          champion_key: string
+          created_at: string | null
+          id: number
+          name: string
+          patch_version: string
+          pick_rate: number
+          role: string
+          tier: string
+          trend: string
+          updated_at: string | null
+          win_rate: number
+        }
+        Insert: {
+          ban_rate: number
+          champion_key: string
+          created_at?: string | null
+          id?: number
+          name: string
+          patch_version?: string
+          pick_rate: number
+          role: string
+          tier: string
+          trend: string
+          updated_at?: string | null
+          win_rate: number
+        }
+        Update: {
+          ban_rate?: number
+          champion_key?: string
+          created_at?: string | null
+          id?: number
+          name?: string
+          patch_version?: string
+          pick_rate?: number
+          role?: string
+          tier?: string
+          trend?: string
+          updated_at?: string | null
+          win_rate?: number
+        }
+        Relationships: []
+      }
+      matchups: {
+        Row: {
+          champion_id: number | null
+          created_at: string | null
+          difficulty: string
+          id: number
+          opponent_champion_id: number | null
+          patch_version: string
+          tips: string | null
+          win_rate: number
+        }
+        Insert: {
+          champion_id?: number | null
+          created_at?: string | null
+          difficulty: string
+          id?: number
+          opponent_champion_id?: number | null
+          patch_version?: string
+          tips?: string | null
+          win_rate: number
+        }
+        Update: {
+          champion_id?: number | null
+          created_at?: string | null
+          difficulty?: string
+          id?: number
+          opponent_champion_id?: number | null
+          patch_version?: string
+          tips?: string | null
+          win_rate?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "matchups_champion_id_fkey"
+            columns: ["champion_id"]
+            isOneToOne: false
+            referencedRelation: "champions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "matchups_opponent_champion_id_fkey"
+            columns: ["opponent_champion_id"]
+            isOneToOne: false
+            referencedRelation: "champions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          id: string
+          preferred_role: string | null
+          rank_tier: string | null
+          summoner_name: string | null
+          updated_at: string | null
+          username: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id: string
+          preferred_role?: string | null
+          rank_tier?: string | null
+          summoner_name?: string | null
+          updated_at?: string | null
+          username?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          preferred_role?: string | null
+          rank_tier?: string | null
+          summoner_name?: string | null
+          updated_at?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
+      user_favorite_builds: {
+        Row: {
+          build_id: number | null
+          created_at: string | null
+          id: number
+          user_id: string | null
+        }
+        Insert: {
+          build_id?: number | null
+          created_at?: string | null
+          id?: number
+          user_id?: string | null
+        }
+        Update: {
+          build_id?: number | null
+          created_at?: string | null
+          id?: number
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_favorite_builds_build_id_fkey"
+            columns: ["build_id"]
+            isOneToOne: false
+            referencedRelation: "builds"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_favorite_builds_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_settings: {
+        Row: {
+          auto_update_builds: boolean | null
+          created_at: string | null
+          id: string
+          notifications_enabled: boolean | null
+          overlay_enabled: boolean | null
+          preferred_language: string | null
+          theme: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          auto_update_builds?: boolean | null
+          created_at?: string | null
+          id: string
+          notifications_enabled?: boolean | null
+          overlay_enabled?: boolean | null
+          preferred_language?: string | null
+          theme?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          auto_update_builds?: boolean | null
+          created_at?: string | null
+          id?: string
+          notifications_enabled?: boolean | null
+          overlay_enabled?: boolean | null
+          preferred_language?: string | null
+          theme?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_settings_id_fkey"
+            columns: ["id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

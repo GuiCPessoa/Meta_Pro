@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import { useTheme } from '@/hooks/useTheme';
 import Auth from '@/components/Auth';
 import Header from '@/components/Header';
 import Navigation from '@/components/Navigation';
@@ -14,6 +15,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 const Index = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const { user, loading } = useAuth();
+  
+  // Aplicar configurações de tema
+  useTheme();
 
   const renderContent = () => {
     switch (activeTab) {

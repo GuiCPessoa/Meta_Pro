@@ -2,8 +2,18 @@
 import React from 'react';
 import ChampionCard from './ChampionCard';
 
+interface Champion {
+  name: string;
+  role: string;
+  tier: 'S' | 'A' | 'B' | 'C' | 'D';
+  winRate: number;
+  pickRate: number;
+  banRate: number;
+  trend: 'up' | 'down' | 'stable';
+}
+
 const TierList = () => {
-  const champions = [
+  const champions: Champion[] = [
     { name: 'Jinx', role: 'ADC', tier: 'S' as const, winRate: 52.8, pickRate: 18.2, banRate: 15.5, trend: 'up' as const },
     { name: 'Graves', role: 'Jungle', tier: 'S' as const, winRate: 51.9, pickRate: 12.4, banRate: 8.3, trend: 'up' as const },
     { name: 'Yasuo', role: 'Mid', tier: 'A' as const, winRate: 49.7, pickRate: 24.1, banRate: 32.8, trend: 'stable' as const },
@@ -12,14 +22,14 @@ const TierList = () => {
     { name: 'Azir', role: 'Mid', tier: 'C' as const, winRate: 47.3, pickRate: 4.1, banRate: 2.8, trend: 'down' as const },
   ];
 
-  const groupBytier = (champions: typeof champions) => {
+  const groupBytier = (champions: Champion[]) => {
     return champions.reduce((acc, champion) => {
       if (!acc[champion.tier]) {
         acc[champion.tier] = [];
       }
       acc[champion.tier].push(champion);
       return acc;
-    }, {} as Record<string, typeof champions>);
+    }, {} as Record<string, Champion[]>);
   };
 
   const groupedChampions = groupBytier(champions);

@@ -119,7 +119,16 @@ const TierList = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
               {championsInTier.map((champion) => (
-                <ChampionCard key={champion.id} {...champion} />
+                <ChampionCard 
+                  key={champion.id} 
+                  name={champion.name}
+                  role={champion.role}
+                  tier={champion.tier}
+                  winRate={champion.win_rate}
+                  pickRate={champion.pick_rate}
+                  banRate={champion.ban_rate}
+                  trend={champion.trend}
+                />
               ))}
             </div>
           </div>

@@ -40,7 +40,7 @@ const Header = () => {
         </div>
         
         <Badge variant="secondary" className="ml-4">
-          Patch 13.24
+          Patch 14.1
         </Badge>
       </div>
 

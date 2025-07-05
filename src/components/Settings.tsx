@@ -137,7 +137,7 @@ const Settings = () => {
           label: 'Versão do Patch', 
           description: 'Patch para análise de dados', 
           type: 'select', 
-          value: '13.24' 
+          value: '14.1' 
         },
       ]
     }
@@ -205,9 +205,9 @@ const Settings = () => {
                             )}
                             {setting.id === 'patch-version' && (
                               <>
+                                <SelectItem value="14.1">Patch 14.1</SelectItem>
                                 <SelectItem value="13.24">Patch 13.24</SelectItem>
                                 <SelectItem value="13.23">Patch 13.23</SelectItem>
-                                <SelectItem value="13.22">Patch 13.22</SelectItem>
                               </>
                             )}
                           </SelectContent>

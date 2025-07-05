@@ -99,7 +99,7 @@ const TierList = () => {
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-foreground">Tier List - Meta Atual</h2>
         <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-          <span>Patch 13.24</span>
+          <span>Patch 14.1</span>
           <span>•</span>
           <span>Atualizado há 2h</span>
         </div>

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 import { Card } from '@/components/ui/card';
@@ -11,7 +10,7 @@ interface ChampionCardProps {
   pickRate: number;
   banRate: number;
   trend: 'up' | 'down' | 'stable';
-  image?: string;
+  championKey: string; 
 }
 
 const ChampionCard: React.FC<ChampionCardProps> = ({
@@ -22,16 +21,16 @@ const ChampionCard: React.FC<ChampionCardProps> = ({
   pickRate,
   banRate,
   trend,
-  image
+  championKey 
 }) => {
   const getTierClass = (tier: string) => {
     switch (tier) {
-      case 'S': return 'bg-tier-s';
-      case 'A': return 'bg-tier-a';
-      case 'B': return 'bg-tier-b';
-      case 'C': return 'bg-tier-c';
-      case 'D': return 'bg-tier-d';
-      default: return 'bg-tier-c';
+      case 'S': return 'tier-s'; 
+      case 'A': return 'tier-a'; 
+      case 'B': return 'tier-b'; 
+      case 'C': return 'tier-c'; 
+      case 'D': return 'tier-d'; 
+      default: return 'tier-c';
     }
   };
 
@@ -50,18 +49,14 @@ const ChampionCard: React.FC<ChampionCardProps> = ({
         
         <div className="flex items-center space-x-3 mb-3">
           <div className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden bg-secondary">
-            {image ? (
-              <img 
-                src={image} 
-                alt={name} 
+            {championKey ? (
+              <img
+                src={`/champions/${championKey}.png`} 
+                alt={name}
                 className="w-full h-full object-cover"
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                }}
               />
             ) : null}
-            <span className={`text-primary font-bold ${image ? 'hidden' : ''}`}>
+            <span className={`text-primary font-bold`}> 
               {name[0]}
             </span>
           </div>

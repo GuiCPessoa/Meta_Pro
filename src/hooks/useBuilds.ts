@@ -1,6 +1,6 @@
-
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { RuneConfig } from '@/integrations/supabase/types';
 
 export interface Build {
   id: number;
@@ -8,9 +8,7 @@ export interface Build {
   name: string;
   role: string;
   items: string[];
-  runes: string[];
-  item_ids?: number[];
-  rune_ids?: number[];
+  runes: RuneConfig;
   skill_order?: string[];
   win_rate: number;
   pick_rate: number;
@@ -20,6 +18,13 @@ export interface Build {
   patch_version: string;
   created_at?: string;
   updated_at?: string;
+}
+
+export interface FeaturedBuild extends Build {
+  champions: {
+    name: string;
+    champion_key: string;
+  };
 }
 
 export const useBuilds = (championId?: number) => {
@@ -54,7 +59,7 @@ export const useFeaturedBuilds = () => {
         .order('win_rate', { ascending: false });
       
       if (error) throw error;
-      return data;
+      return data as FeaturedBuild[];
     },
   });
 };

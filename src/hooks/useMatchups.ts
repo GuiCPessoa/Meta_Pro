@@ -1,38 +1,26 @@
-
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { Database } from '@/integrations/supabase/types';
 
-export interface Matchup {
-  id: number;
-  champion_id?: number;
-  opponent_champion_id?: number;
-  win_rate: number;
-  difficulty: string;
-  tips?: string;
-  patch_version: string;
-  created_at?: string;
-}
+export type Matchup = Database['public']['Tables']['matchups']['Row'] & {
+  champions: {
+    name: string;
+    champion_key: string;
+  };
+};
 
-export const useMatchups = (championId?: number) => {
-  return useQuery({
+export const useMatchups = (championId: number) => {
+  return useQuery<Matchup[], Error>({
     queryKey: ['matchups', championId],
     queryFn: async () => {
-      let query = supabase
+      const { data, error } = await supabase
         .from('matchups')
-        .select(`
-          *,
-          opponent:champions!matchups_opponent_champion_id_fkey(name, image_url)
-        `)
-        .order('win_rate', { ascending: false });
-      
-      if (championId) {
-        query = query.eq('champion_id', championId);
-      }
-      
-      const { data, error } = await query;
-      
+        .select('*, champions!matchups_opponent_champion_id_fkey(name, champion_key)')
+        .eq('champion_id', championId);
+
       if (error) throw error;
-      return data;
+
+      return data as Matchup[];
     },
     enabled: !!championId,
   });

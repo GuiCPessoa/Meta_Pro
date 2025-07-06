@@ -6,6 +6,18 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
+export type RuneConfig = {
+  primary: {
+    tree: string;
+    keystone: string;
+    runes: string[];
+  };
+  secondary: {
+    tree: string;
+    runes: string[];
+  };
+};
+
 export type Database = {
   public: {
     Tables: {

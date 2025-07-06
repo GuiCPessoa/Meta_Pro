@@ -3,38 +3,31 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Search, Filter } from 'lucide-react';
+import { Search, Filter, Loader2 } from 'lucide-react';
+import { useChampions } from '@/hooks/useChampions';
 import ChampionCard from './ChampionCard';
 import ChampionDetails from './ChampionDetails';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Champions = () => {
-  const [selectedChampion, setSelectedChampion] = useState<string | null>(null);
+  const [selectedChampion, setSelectedChampion] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState('all');
   const [tierFilter, setTierFilter] = useState('all');
+  
+  const { data: champions, isLoading, error } = useChampions();
 
-  const champions = [
-    { name: 'Jinx', role: 'ADC', tier: 'S' as const, winRate: 52.8, pickRate: 18.2, banRate: 15.5, trend: 'up' as const },
-    { name: 'Graves', role: 'Jungle', tier: 'S' as const, winRate: 51.9, pickRate: 12.4, banRate: 8.3, trend: 'up' as const },
-    { name: 'Yasuo', role: 'Mid', tier: 'A' as const, winRate: 49.7, pickRate: 24.1, banRate: 32.8, trend: 'stable' as const },
-    { name: 'Thresh', role: 'Support', tier: 'A' as const, winRate: 50.2, pickRate: 15.6, banRate: 12.1, trend: 'down' as const },
-    { name: 'Garen', role: 'Top', tier: 'B' as const, winRate: 51.1, pickRate: 8.9, banRate: 3.2, trend: 'up' as const },
-    { name: 'Azir', role: 'Mid', tier: 'C' as const, winRate: 47.3, pickRate: 4.1, banRate: 2.8, trend: 'down' as const },
-    { name: 'Caitlyn', role: 'ADC', tier: 'A' as const, winRate: 50.8, pickRate: 14.7, banRate: 8.9, trend: 'stable' as const },
-    { name: 'Lee Sin', role: 'Jungle', tier: 'B' as const, winRate: 48.6, pickRate: 16.3, banRate: 5.2, trend: 'down' as const },
-  ];
-
-  const filteredChampions = champions.filter(champion => {
+  const filteredChampions = champions?.filter(champion => {
     const matchesSearch = champion.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRole = roleFilter === 'all' || champion.role === roleFilter;
     const matchesTier = tierFilter === 'all' || champion.tier === tierFilter;
     return matchesSearch && matchesRole && matchesTier;
-  });
+  }) || [];
 
   if (selectedChampion) {
     return (
       <ChampionDetails
-        championName={selectedChampion}
+        championId={selectedChampion}
         onBack={() => setSelectedChampion(null)}
       />
     );
@@ -90,16 +83,43 @@ const Champions = () => {
         </Select>
       </div>
 
-      {/* Champions Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {filteredChampions.map((champion, index) => (
-          <div key={index} onClick={() => setSelectedChampion(champion.name)}>
-            <ChampionCard {...champion} />
-          </div>
-        ))}
-      </div>
+      {/* Loading State */}
+      {isLoading && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <Skeleton key={i} className="h-48 w-full" />
+          ))}
+        </div>
+      )}
 
-      {filteredChampions.length === 0 && (
+      {/* Error State */}
+      {error && (
+        <div className="text-center py-12">
+          <p className="text-red-500">Erro ao carregar campeões. Tente novamente.</p>
+        </div>
+      )}
+
+      {/* Champions Grid */}
+      {!isLoading && !error && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {filteredChampions.map((champion) => (
+            <div key={champion.id} onClick={() => setSelectedChampion(champion.id)}>
+              <ChampionCard 
+                name={champion.name}
+                role={champion.role}
+                tier={champion.tier}
+                winRate={champion.win_rate}
+                pickRate={champion.pick_rate}
+                banRate={champion.ban_rate}
+                trend={champion.trend}
+                image={champion.image_url}
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {!isLoading && !error && filteredChampions.length === 0 && (
         <div className="text-center py-12">
           <p className="text-muted-foreground">Nenhum campeão encontrado com os filtros aplicados.</p>
         </div>

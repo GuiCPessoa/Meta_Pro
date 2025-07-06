@@ -2,9 +2,30 @@
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { TrendingUp, Users, Zap, Trophy } from 'lucide-react';
+import { useChampions } from '@/hooks/useChampions';
 import ChampionCard from './ChampionCard';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Dashboard = () => {
+  const { data: champions, isLoading } = useChampions();
+
+  // Pegar os top 3 campeões por tier e win rate
+  const topChampions = champions
+    ?.filter(c => c.tier === 'S' || c.tier === 'A')
+    .sort((a, b) => {
+      if (a.tier !== b.tier) {
+        return a.tier === 'S' ? -1 : 1;
+      }
+      return b.win_rate - a.win_rate;
+    })
+    .slice(0, 3) || [];
+
+  // Calcular estatísticas gerais
+  const avgWinRate = champions ? 
+    (champions.reduce((sum, c) => sum + c.win_rate, 0) / champions.length).toFixed(1) : '0';
+  
+  const tierSChampions = champions?.filter(c => c.tier === 'S').length || 0;
+  
   const stats = [
     {
       title: 'Meta Score',
@@ -15,35 +36,29 @@ const Dashboard = () => {
       description: 'Estabilidade do meta atual'
     },
     {
-      title: 'Patches Analisados',
-      value: '12',
-      change: '+2',
+      title: 'Patch Atual',
+      value: '14.1',
+      change: 'Novo',
       trend: 'up',
       icon: Zap,
-      description: 'Últimos patches monitorados'
+      description: 'Versão mais recente'
     },
     {
-      title: 'Jogadores Ativos',
-      value: '2.4M',
-      change: '+15%',
+      title: 'Campeões Tier S',
+      value: tierSChampions.toString(),
+      change: '+2',
       trend: 'up',
       icon: Users,
-      description: 'Base de dados atual'
+      description: 'Picks mais fortes'
     },
     {
       title: 'Win Rate Médio',
-      value: '51.2%',
+      value: `${avgWinRate}%`,
       change: '+1.1%',
       trend: 'up',
       icon: TrendingUp,
-      description: 'Média dos top picks'
+      description: 'Média geral dos campeões'
     }
-  ];
-
-  const topChampions = [
-    { name: 'Jinx', role: 'ADC', tier: 'S' as const, winRate: 52.8, pickRate: 18.2, banRate: 15.5, trend: 'up' as const },
-    { name: 'Graves', role: 'Jungle', tier: 'S' as const, winRate: 51.9, pickRate: 12.4, banRate: 8.3, trend: 'up' as const },
-    { name: 'Yasuo', role: 'Mid', tier: 'A' as const, winRate: 49.7, pickRate: 24.1, banRate: 32.8, trend: 'stable' as const },
   ];
 
   return (
@@ -51,7 +66,7 @@ const Dashboard = () => {
       <div>
         <h2 className="text-3xl font-bold text-foreground mb-2">Dashboard</h2>
         <p className="text-muted-foreground">
-          Visão geral do meta atual do League of Legends
+          Visão geral do meta atual do League of Legends - Patch 14.1
         </p>
       </div>
 
@@ -84,15 +99,34 @@ const Dashboard = () => {
       <Card className="bg-card border-border p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-bold text-foreground">Top Picks do Meta</h3>
-          <button className="text-primary hover:text-primary/80 text-sm font-medium">
-            Ver todos
-          </button>
+          <span className="text-primary text-sm font-medium">
+            Patch 14.1
+          </span>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {topChampions.map((champion, index) => (
-            <ChampionCard key={index} {...champion} />
-          ))}
-        </div>
+        
+        {isLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <Skeleton key={i} className="h-48 w-full" />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {topChampions.map((champion) => (
+              <ChampionCard 
+                key={champion.id} 
+                name={champion.name}
+                role={champion.role}
+                tier={champion.tier}
+                winRate={champion.win_rate}
+                pickRate={champion.pick_rate}
+                banRate={champion.ban_rate}
+                trend={champion.trend}
+                image={champion.image_url}
+              />
+            ))}
+          </div>
+        )}
       </Card>
 
       {/* Recent Updates */}
@@ -102,21 +136,21 @@ const Dashboard = () => {
           <div className="flex items-start space-x-3 p-3 bg-secondary/50 rounded-lg">
             <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
             <div>
-              <p className="text-foreground font-medium">Patch 13.24 Análise</p>
+              <p className="text-foreground font-medium">Patch 14.1 Análise</p>
               <p className="text-sm text-muted-foreground">
-                Jinx recebeu buffs significativos, subindo para Tier S
+                Novos dados de campeões atualizados com base no meta atual
               </p>
-              <p className="text-xs text-muted-foreground mt-1">2 horas atrás</p>
+              <p className="text-xs text-muted-foreground mt-1">Atualizado agora</p>
             </div>
           </div>
           <div className="flex items-start space-x-3 p-3 bg-secondary/50 rounded-lg">
             <div className="w-2 h-2 bg-accent rounded-full mt-2"></div>
             <div>
-              <p className="text-foreground font-medium">Meta Shift Detectado</p>
+              <p className="text-foreground font-medium">Sistema de Busca Ativo</p>
               <p className="text-sm text-muted-foreground">
-                ADCs estão dominando o bot lane com 54% de win rate médio
+                Agora você pode buscar por qualquer campeão e ver builds, runas e matchups
               </p>
-              <p className="text-xs text-muted-foreground mt-1">5 horas atrás</p>
+              <p className="text-xs text-muted-foreground mt-1">Recurso adicionado</p>
             </div>
           </div>
         </div>

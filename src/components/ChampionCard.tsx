@@ -26,12 +26,12 @@ const ChampionCard: React.FC<ChampionCardProps> = ({
 }) => {
   const getTierClass = (tier: string) => {
     switch (tier) {
-      case 'S': return 'tier-s';
-      case 'A': return 'tier-a';
-      case 'B': return 'tier-b';
-      case 'C': return 'tier-c';
-      case 'D': return 'tier-d';
-      default: return 'tier-c';
+      case 'S': return 'bg-tier-s';
+      case 'A': return 'bg-tier-a';
+      case 'B': return 'bg-tier-b';
+      case 'C': return 'bg-tier-c';
+      case 'D': return 'bg-tier-d';
+      default: return 'bg-tier-c';
     }
   };
 
@@ -49,8 +49,21 @@ const ChampionCard: React.FC<ChampionCardProps> = ({
         </div>
         
         <div className="flex items-center space-x-3 mb-3">
-          <div className="w-12 h-12 bg-secondary rounded-full flex items-center justify-center">
-            <span className="text-primary font-bold">{name[0]}</span>
+          <div className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden bg-secondary">
+            {image ? (
+              <img 
+                src={image} 
+                alt={name} 
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                  e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                }}
+              />
+            ) : null}
+            <span className={`text-primary font-bold ${image ? 'hidden' : ''}`}>
+              {name[0]}
+            </span>
           </div>
           <div>
             <h3 className="font-bold text-foreground group-hover:text-primary transition-colors">

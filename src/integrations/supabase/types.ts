@@ -16,11 +16,13 @@ export type Database = {
           games_played: number | null
           id: number
           is_featured: boolean | null
+          item_ids: number[] | null
           items: Json
           name: string
           patch_version: string
           pick_rate: number
           role: string
+          rune_ids: number[] | null
           runes: Json
           skill_order: Json | null
           tier: string
@@ -33,11 +35,13 @@ export type Database = {
           games_played?: number | null
           id?: number
           is_featured?: boolean | null
+          item_ids?: number[] | null
           items: Json
           name: string
           patch_version?: string
           pick_rate: number
           role: string
+          rune_ids?: number[] | null
           runes: Json
           skill_order?: Json | null
           tier: string
@@ -50,11 +54,13 @@ export type Database = {
           games_played?: number | null
           id?: number
           is_featured?: boolean | null
+          item_ids?: number[] | null
           items?: Json
           name?: string
           patch_version?: string
           pick_rate?: number
           role?: string
+          rune_ids?: number[] | null
           runes?: Json
           skill_order?: Json | null
           tier?: string
@@ -77,10 +83,12 @@ export type Database = {
           champion_key: string
           created_at: string | null
           id: number
+          image_url: string | null
           name: string
           patch_version: string
           pick_rate: number
           role: string
+          splash_art_url: string | null
           tier: string
           trend: string
           updated_at: string | null
@@ -91,10 +99,12 @@ export type Database = {
           champion_key: string
           created_at?: string | null
           id?: number
+          image_url?: string | null
           name: string
           patch_version?: string
           pick_rate: number
           role: string
+          splash_art_url?: string | null
           tier: string
           trend: string
           updated_at?: string | null
@@ -105,14 +115,55 @@ export type Database = {
           champion_key?: string
           created_at?: string | null
           id?: number
+          image_url?: string | null
           name?: string
           patch_version?: string
           pick_rate?: number
           role?: string
+          splash_art_url?: string | null
           tier?: string
           trend?: string
           updated_at?: string | null
           win_rate?: number
+        }
+        Relationships: []
+      }
+      items: {
+        Row: {
+          build_path: Json | null
+          cost: number | null
+          created_at: string | null
+          description: string | null
+          id: number
+          image_url: string | null
+          item_key: string
+          name: string
+          stats: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          build_path?: Json | null
+          cost?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: number
+          image_url?: string | null
+          item_key: string
+          name: string
+          stats?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          build_path?: Json | null
+          cost?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: number
+          image_url?: string | null
+          item_key?: string
+          name?: string
+          stats?: Json | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -191,6 +242,42 @@ export type Database = {
           summoner_name?: string | null
           updated_at?: string | null
           username?: string | null
+        }
+        Relationships: []
+      }
+      runes: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: number
+          image_url: string | null
+          name: string
+          rune_key: string
+          tier: number
+          tree: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: number
+          image_url?: string | null
+          name: string
+          rune_key: string
+          tier: number
+          tree: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: number
+          image_url?: string | null
+          name?: string
+          rune_key?: string
+          tier?: number
+          tree?: string
+          updated_at?: string | null
         }
         Relationships: []
       }

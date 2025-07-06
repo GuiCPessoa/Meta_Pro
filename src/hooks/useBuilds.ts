@@ -9,6 +9,8 @@ export interface Build {
   role: string;
   items: string[];
   runes: string[];
+  item_ids?: number[];
+  rune_ids?: number[];
   skill_order?: string[];
   win_rate: number;
   pick_rate: number;

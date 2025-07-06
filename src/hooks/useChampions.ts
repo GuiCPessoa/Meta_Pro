@@ -13,6 +13,8 @@ export interface Champion {
   ban_rate: number;
   trend: 'up' | 'down' | 'stable';
   patch_version: string;
+  image_url?: string;
+  splash_art_url?: string;
   created_at?: string;
   updated_at?: string;
 }
